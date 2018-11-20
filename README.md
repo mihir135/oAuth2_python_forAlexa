@@ -8,15 +8,13 @@ url = [
     (r'/oa2/login', Oa2LoginHandle),
 ]
 ```
+Where /oa2/auth is the Authorization URL in Account Linking in the skill configuration.
+/oa2/login is the URL submitted by the login button in login.html.
+/oa2/token is the interface that alexa periodically obtains tokens from the oauth2 server.
 
-其中
-/oa2/auth是在skill configuration中的Account Linking中的Authorization URL，  
-/oa2/login是login.html中登录按钮提交的URL，  
-/oa2/token是alexa向oauth2 server定期获取token的接口。  
-  
-具体流程是：  
-1、用户在alexa app上enable你开发的skill的时候，会调用/oa2/auth接口，进入到login.html页面（你的系统的登录页面）；  
-2、用户使用你系统的账号和密码登录，点击connect，调用/oa2/login；  
-3、在/oa2/login进行用户密码校验，成功之后返回重定向页面（alexa的提示页面），同时返回一个code（你自定义，和user产生关联就好）；  
-4、alexa调用/oa2/token定期获取token，你需要进行code和client_id等校验，然后返回tocken和refreshtoken。这个token会在skill中每个请求的scope/token。这样就能确定每次你的skill收到的信息是哪个用户发来的了；  
-5、enable skill完了之后，会有一个discover的动作。你只需要在skill里面处理discover指令，返回对应token（用户）下面的device列表即可。  
+The specific process is:
+1. When the user activates the skill you developed on the alexa app, it will call the /oa2/auth interface and go to the login.html page (the login page of your system);
+2, the user uses your system's account and password to log in, click connect, call /oa2/login;
+3. User password verification in /oa2/login, return to the redirect page after successful (alexa prompt page), and return a code (you customize, associate with user);
+4, alexa call /oa2/token to get the token regularly, you need to check the code and client_id, and then return tocken and refreshtoken. This token will be the scope/token of each request in the skill. This will determine which user received the message each time your skill received.
+5. After the enable skill is finished, there will be a discovery action. You only need to process the discover command in the skill and return the list of devices under the corresponding token (user).
